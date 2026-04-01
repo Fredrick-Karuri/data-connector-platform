@@ -1,0 +1,11 @@
+{
+    "python.analysis.extraPaths": [
+        "./.venv/lib/python3.14/site-packages",
+        "./typings"
+    ],
+    "python.analysis.indexing": true,
+    "python.analysis.packageIndexDepths": [
+        { "name": "rest_framework", "depth": 10 },
+        { "name": "django", "depth": 10 }
+    ]
+}
