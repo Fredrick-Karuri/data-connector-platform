@@ -1,11 +1,10 @@
-FROM python:3.12-slim
+FROM python:3.12
 
-#Environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+    PYTHONPATH=/workspace/app/backend
 
-# Setup Non-Root User for Dev Container
+# Setup Non-Root User
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -17,27 +16,22 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-#Install System Dependencies
+# System Dependencies (Standard Debian Node & DB Drivers)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
+    curl \
+    git \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /workspace
 
-# Prepare Storage and Permissions
-RUN mkdir -p /storage && chown -R $USERNAME:$USERNAME /app /storage
+# Storage & Requirements
+RUN mkdir -p /storage && chown -R $USERNAME:$USERNAME /workspace /storage
+# DRY: Install requirements during build so they are ready on startup
+COPY app/backend/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-# Install Python Dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy Project Files with Correct Ownership
-COPY --chown=$USERNAME:$USERNAME . .
-
-EXPOSE 8000
-
-# Switch to Non-Root User
 USER $USERNAME
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
