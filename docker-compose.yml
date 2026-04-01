@@ -1,0 +1,193 @@
+version: "3.9"
+
+services:
+
+  # ── Frontend ──────────────────────────────
+  web:
+    build:
+      context: ./app/frontend
+      dockerfile: Dockerfile
+    container_name: dcp_web
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - api
+    networks:
+      - dcp_internal
+
+  # ── Django REST Framework API ──────────────
+  api:
+    build:
+      context: ./app/backend
+      dockerfile: Dockerfile
+    container_name: dcp_api
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: core.settings
+      DATABASE_URL: postgres://dcp_user:dcp_pass@app_postgres:5432/dcp_db
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      STORAGE_ROOT: /storage
+    volumes:
+      - ./app/backend:/app
+      - file_exports:/storage
+    depends_on:
+      app_postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - dcp_internal
+
+  # ── Celery Worker ──────────────────────────
+  worker:
+    build:
+      context: ./app/backend
+      dockerfile: Dockerfile
+    container_name: dcp_worker
+    command: celery -A core worker --loglevel=info --concurrency=4
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: core.settings
+      DATABASE_URL: postgres://dcp_user:dcp_pass@app_postgres:5432/dcp_db
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      STORAGE_ROOT: /storage
+    volumes:
+      - ./app/backend:/app
+      - file_exports:/storage
+    depends_on:
+      - api
+      - redis
+    networks:
+      - dcp_internal
+
+  # ── Redis (Broker + Result Cache) ──────────
+  redis:
+    image: redis:7-alpine
+    container_name: dcp_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - dcp_internal
+
+  # ── Application PostgreSQL ─────────────────
+  app_postgres:
+    image: postgres:15-alpine
+    container_name: dcp_app_postgres
+    environment:
+      POSTGRES_USER: dcp_user
+      POSTGRES_PASSWORD: dcp_pass
+      POSTGRES_DB: dcp_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dcp_user -d dcp_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - dcp_internal
+
+  # ── Mock Source: PostgreSQL ────────────────
+  mock_postgres:
+    image: postgres:15-alpine
+    container_name: dcp_mock_postgres
+    environment:
+      POSTGRES_USER: mock_user
+      POSTGRES_PASSWORD: mock_pass
+      POSTGRES_DB: mock_postgres_db
+    volumes:
+      - ./scripts/seed_postgres.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mock_user -d mock_postgres_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - dcp_internal
+
+  # ── Mock Source: MySQL ─────────────────────
+  mock_mysql:
+    image: mysql:8.0
+    container_name: dcp_mock_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_USER: mock_user
+      MYSQL_PASSWORD: mock_pass
+      MYSQL_DATABASE: mock_mysql_db
+    volumes:
+      - ./scripts/seed_mysql.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-umock_user", "-pmock_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - dcp_internal
+
+  # ── Mock Source: MongoDB ───────────────────
+  mock_mongo:
+    image: mongo:7
+    container_name: dcp_mock_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mock_user
+      MONGO_INITDB_ROOT_PASSWORD: mock_pass
+      MONGO_INITDB_DATABASE: mock_mongo_db
+    volumes:
+      - ./scripts/seed_mongo.js:/docker-entrypoint-initdb.d/seed.js:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - dcp_internal
+
+  # ── Mock Source: ClickHouse ────────────────
+  mock_clickhouse:
+    image: clickhouse/clickhouse-server:24-alpine
+    container_name: dcp_mock_clickhouse
+    environment:
+      CLICKHOUSE_USER: mock_user
+      CLICKHOUSE_PASSWORD: mock_pass
+      CLICKHOUSE_DB: mock_clickhouse_db
+    volumes:
+      - ./scripts/seed_clickhouse.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --user mock_user --password mock_pass --query 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - dcp_internal
+
+# ─────────────────────────────────────────────
+#  Volumes
+# ─────────────────────────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  file_exports:
+    driver: local
+
+# ─────────────────────────────────────────────
+#  Networks — all backend services are isolated
+#  Only web (port 3000) and api (port 8000)
+#  are reachable from the host machine.
+# ─────────────────────────────────────────────
+networks:
+  dcp_internal:
+    driver: bridge
