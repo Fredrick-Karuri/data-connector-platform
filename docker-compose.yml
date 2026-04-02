@@ -3,8 +3,8 @@ services:
   # ── Frontend ──────────────────────────────
   web:
     build:
-      context: ./app/frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: app/frontend/Dockerfile
     container_name: dcp_web
     ports:
       - "3000:3000"
@@ -18,8 +18,8 @@ services:
   # ── Django REST Framework API ──────────────
   api:
     build:
-      context: ./app/backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: app/backend/Dockerfile
     container_name: dcp_api
     command: python manage.py runserver 0.0.0.0:8000
     ports:
@@ -32,6 +32,7 @@ services:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
       STORAGE_ROOT: /storage
+    working_dir: /app
     volumes:
       - ./app/backend:/app
       - file_exports:/storage
@@ -46,8 +47,8 @@ services:
   # ── Celery Worker ──────────────────────────
   worker:
     build:
-      context: ./app/backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: app/backend/Dockerfile
     container_name: dcp_worker
     command: celery -A core worker --loglevel=info --concurrency=4
     env_file:
@@ -58,6 +59,7 @@ services:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
       STORAGE_ROOT: /storage
+    working_dir: /app
     volumes:
       - ./app/backend:/app
       - file_exports:/storage
@@ -107,8 +109,6 @@ services:
       POSTGRES_USER: mock_user
       POSTGRES_PASSWORD: mock_pass
       POSTGRES_DB: mock_postgres_db
-    volumes:
-      - ./scripts/seed_postgres.sql:/docker-entrypoint-initdb.d/seed.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U mock_user -d mock_postgres_db"]
       interval: 5s
@@ -126,8 +126,6 @@ services:
       MYSQL_USER: mock_user
       MYSQL_PASSWORD: mock_pass
       MYSQL_DATABASE: mock_mysql_db
-    volumes:
-      - ./scripts/seed_mysql.sql:/docker-entrypoint-initdb.d/seed.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-umock_user", "-pmock_pass"]
       interval: 10s
@@ -144,8 +142,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mock_user
       MONGO_INITDB_ROOT_PASSWORD: mock_pass
       MONGO_INITDB_DATABASE: mock_mongo_db
-    volumes:
-      - ./scripts/seed_mongo.js:/docker-entrypoint-initdb.d/seed.js:ro
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -162,8 +158,6 @@ services:
       CLICKHOUSE_USER: mock_user
       CLICKHOUSE_PASSWORD: mock_pass
       CLICKHOUSE_DB: mock_clickhouse_db
-    volumes:
-      - ./scripts/seed_clickhouse.sql:/docker-entrypoint-initdb.d/seed.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "clickhouse-client --user mock_user --password mock_pass --query 'SELECT 1'"]
       interval: 10s

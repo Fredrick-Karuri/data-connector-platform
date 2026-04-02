@@ -1,4 +1,4 @@
-# Makefile shortcuts for build, test, and seed commands
+# Makefile shortcuts for DCP (Data Connector Platform)
 
 help:
 	@echo "Usage:"
@@ -6,11 +6,14 @@ help:
 	@echo "  make down            # stop containers"
 	@echo "  make build           # build images"
 	@echo "  make restart         # rebuild + restart"
-	@echo "  make backend-migrate # run Django migrations"
-	@echo "  make backend-shell   # run Django shell"
-	@echo "  make backend-test    # run backend pytest"
-	@echo "  make frontend-test   # run frontend tests"
-	@echo "  make seed            # run seed fixtures"
+	@echo "  make migrate         # run Django migrations"
+	@echo "  make test-backend    # run backend pytest"
+	@echo "  make test-frontend   # run frontend npm tests"
+	@echo "  make test            # run all tests"
+	@echo "  make logs            # follow api and worker logs"
+	@echo "  make seed            # setup mock sources + load django fixtures"
+	@echo "  make shell-api       # open django shell"
+	@echo "  make shell-worker    # inspect celery worker"
 
 up:
 	docker compose up -d --build
@@ -23,20 +26,31 @@ build:
 
 restart: down up
 
-backend-migrate:
-	docker compose exec backend python manage.py migrate
+migrate:
+	docker compose exec api python manage.py migrate
 
-backend-shell:
-	docker compose exec backend python manage.py shell
+test-backend:
+	docker compose exec api pytest -q
 
-backend-test:
-	docker compose exec backend pytest -q
+test-frontend:
+	docker compose exec web npm test
 
-frontend-test:
-	cd app/frontend && npm test
+test:
+	docker compose exec api pytest
+	docker compose exec web npm test
+
+logs:
+	docker compose logs -f api worker
 
 seed:
-	docker compose exec backend python manage.py loaddata fixtures/seed.json
+	@chmod +x scripts/setup_sources.sh
+	./scripts/setup_sources.sh
+	docker compose exec api python manage.py loaddata /app/fixtures/seed.json
 
+shell-api:
+	docker compose exec api python manage.py shell
 
-.PHONY: help up down build restart backend-migrate backend-shell backend-test frontend-test seed
+shell-worker:
+	docker compose exec worker celery -A core inspect active
+
+.PHONY: help up down build restart migrate test-backend test-frontend test logs seed shell-api shell-worker
