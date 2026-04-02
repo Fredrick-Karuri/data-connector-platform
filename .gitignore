@@ -150,3 +150,6 @@ static/
 **/cache/knowledge_graph/**
 
 **/make_admin.py
+
+# TypeScript build info
+*.tsbuildinfo
