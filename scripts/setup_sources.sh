@@ -47,7 +47,10 @@ else
   log "PostgreSQL: seeding inventory_items..."
   docker exec -i dcp_mock_postgres \
     psql -U mock_user -d mock_postgres_db < "$(dirname "$0")/seed_postgres.sql"
-  log "PostgreSQL: seed complete."
+
+  PG_COUNT=$(docker exec dcp_mock_postgres \
+    psql -U mock_user -d mock_postgres_db -tAc "SELECT COUNT(*) FROM inventory_items;" 2>/dev/null || echo "0")
+  log "PostgreSQL: seed complete. Total rows: $PG_COUNT"
 fi
 
 # ── MySQL ──────────────────────────────────────────────────────────────────────
@@ -63,7 +66,12 @@ else
   log "MySQL: seeding customer_leads..."
   docker exec -i dcp_mock_mysql \
     mysql -umock_user -pmock_pass mock_mysql_db < "$(dirname "$0")/seed_mysql.sql"
-  log "MySQL: seed complete."
+  
+  MY_COUNT=$(docker exec dcp_mock_mysql \ 
+    mysql -umock_user -pmock_pass -D mock_mysql_db -sNe "SELECT COUNT(*) FROM customer_leads;" 2>/dev/null || echo "0")
+
+  log "MySQL: seed complete. Total rows: $MY_COUNT"
+
 fi
 
 # ── MongoDB ────────────────────────────────────────────────────────────────────
@@ -81,7 +89,12 @@ else
   docker exec -i dcp_mock_mongo \
     mongosh -u mock_user -p mock_pass --authenticationDatabase admin \
     mock_mongo_db < "$(dirname "$0")/seed_mongo.js"
-  log "MongoDB: seed complete."
+  
+  MONGO_COUNT=$(docker exec dcp_mock_mongo \ 
+    mongosh --quiet -u mock_user -p mock_pass --authenticationDatabase admin \ 
+    mock_mongo_db --eval "db.user_logs.countDocuments()" 2>/dev/null || echo "0")
+
+  log "MongoDB: seed complete. Total docs: $MONGO_COUNT"
 fi
 
 # ── ClickHouse ─────────────────────────────────────────────────────────────────
@@ -99,7 +112,12 @@ else
   docker exec -i dcp_mock_clickhouse \
     clickhouse-client --user mock_user --password mock_pass \
     --multiquery < "$(dirname "$0")/seed_clickhouse.sql"
-  log "ClickHouse: seed complete."
+  
+  CH_COUNT=$(docker exec dcp_mock_clickhouse \ 
+    clickhouse-client --user mock_user --password mock_pass \ 
+    --query "SELECT COUNT(*) FROM mock_clickhouse_db.sensor_readings" 2>/dev/null || echo "0")
+
+  log "ClickHouse: seed complete. Total rows: $CH_COUNT"
 fi
 
 # ── Summary ────────────────────────────────────────────────────────────────────

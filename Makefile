@@ -45,7 +45,7 @@ logs:
 seed:
 	@chmod +x scripts/setup_sources.sh
 	./scripts/setup_sources.sh
-	docker compose exec api python manage.py loaddata fixtures/seed.json
+	docker compose exec api python manage.py loaddata /app/fixtures/seed.json
 
 shell-api:
 	docker compose exec api python manage.py shell
