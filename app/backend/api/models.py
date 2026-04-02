@@ -43,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff   = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    objects = UserManager()
+    objects:UserManager = UserManager()
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
