@@ -3,8 +3,8 @@ services:
   # ── Frontend ──────────────────────────────
   web:
     build:
-      context: ./app/frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: app/frontend/Dockerfile
     container_name: dcp_web
     ports:
       - "3000:3000"
@@ -18,8 +18,8 @@ services:
   # ── Django REST Framework API ──────────────
   api:
     build:
-      context: ./app/backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: app/backend/Dockerfile
     container_name: dcp_api
     command: python manage.py runserver 0.0.0.0:8000
     ports:
@@ -46,8 +46,8 @@ services:
   # ── Celery Worker ──────────────────────────
   worker:
     build:
-      context: ./app/backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: app/backend/Dockerfile
     container_name: dcp_worker
     command: celery -A core worker --loglevel=info --concurrency=4
     env_file:
