@@ -9,6 +9,7 @@ from api.views.connections import (
     test_connection,
     retest_connection,
 )
+from api.views.extraction import extract, job_detail
 
 urlpatterns = [
     # ── Connections (DCP-09) ───────────────────────────────────────────────────
@@ -18,8 +19,8 @@ urlpatterns = [
     path("connections/<uuid:pk>/retest/", retest_connection, name="connection-retest"),
 
     # ── Extraction (DCP-10) ────────────────────────────────────────────────────
-    # path("extract/",         extract,        name="extract"),
-    # path("jobs/<uuid:pk>/",  job_detail,     name="job-detail"),
+    path("extract/",         extract,        name="extract"),
+    path("jobs/<uuid:pk>/",  job_detail,     name="job-detail"),
 
     # ── Submission (DCP-11) ───────────────────────────────────────────────────
     # path("submit-batch/",    submit_batch,   name="submit-batch"),
