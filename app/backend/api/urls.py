@@ -10,6 +10,7 @@ from api.views.connections import (
     retest_connection,
 )
 from api.views.extraction import extract, job_detail
+from api.views.submission import submit_batch
 
 urlpatterns = [
     # ── Connections (DCP-09) ───────────────────────────────────────────────────
@@ -23,7 +24,7 @@ urlpatterns = [
     path("jobs/<uuid:pk>/",  job_detail,     name="job-detail"),
 
     # ── Submission (DCP-11) ───────────────────────────────────────────────────
-    # path("submit-batch/",    submit_batch,   name="submit-batch"),
+    path("submit-batch/",    submit_batch,   name="submit-batch"),
 
     # ── Files / RBAC (DCP-12) ─────────────────────────────────────────────────
     # path("files/",                    files_list,       name="files-list"),
