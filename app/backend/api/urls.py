@@ -11,6 +11,11 @@ from api.views.connections import (
 )
 from api.views.extraction import extract, job_detail
 from api.views.submission import submit_batch
+from api.views.files import (
+    file_download, 
+    file_share, 
+    files_list
+)
 
 urlpatterns = [
     # ── Connections (DCP-09) ───────────────────────────────────────────────────
@@ -27,6 +32,7 @@ urlpatterns = [
     path("submit-batch/",    submit_batch,   name="submit-batch"),
 
     # ── Files / RBAC (DCP-12) ─────────────────────────────────────────────────
-    # path("files/",                    files_list,       name="files-list"),
-    # path("files/<uuid:pk>/download/", file_download,    name="file-download"),
+    path("files/",                    files_list,       name="files-list"),
+    path("files/<uuid:pk>/download/", file_download,    name="file-download"),
+    path("files/<uuid:pk>/share/", file_share, name="file-share"),
 ]
