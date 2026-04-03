@@ -1,6 +1,7 @@
 """
-DCP-02 | core/urls.py
+core/urls.py
 """
+from django.http import JsonResponse
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView
 from api.views.auth import RoleTokenObtainPairView, register, logout, me
@@ -12,6 +13,8 @@ urlpatterns = [
     path("api/auth/register/",      register,                          name="register"),
     path("api/auth/logout/",        logout,                            name="logout"),
     path("api/auth/me/",            me,                                name="me"),
-    # ── App routes — wired in DCP-09 through DCP-12 ───
+    # ── Health check ──────────────────────────────────
+    path("",                        lambda request: JsonResponse({"status": "ok", "service": "DCP API"})),
+    # ── App routes ───
     path("api/", include("api.urls")),
 ]
