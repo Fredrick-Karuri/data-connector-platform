@@ -4,7 +4,6 @@
 
 import { renderHook, act } from "@testing-library/react";
 import { useDiffTracker } from "@/hooks/useDiffTracker";
-import { jest } from "@jest/globals";
 
 const INITIAL_ROWS = [
   { id: "row_1", name: "Widget A", price: 9.99,  in_stock: true  },
