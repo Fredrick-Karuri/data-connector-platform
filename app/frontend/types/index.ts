@@ -59,6 +59,7 @@ export interface FileMetadata {
   format: FileFormat;
   owner_id: string;
   source_metadata: Record<string, unknown>;
+  checksum: string;
   created_at: string;
 }
 
