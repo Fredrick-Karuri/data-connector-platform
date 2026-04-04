@@ -14,6 +14,7 @@ help:
 	@echo "  make logs            # follow api and worker logs"
 	@echo "  make logs-api        # follow api logs only"
 	@echo "  make logs-worker     # follow worker logs only"
+	@echo "  make logs-frontend   # follow frontend logs only"
 	@echo "  make seed            # setup mock sources + load django fixtures"
 	@echo "  make shell-api       # open django shell"
 	@echo "  make shell-worker    # inspect celery worker"
@@ -54,6 +55,9 @@ logs-api:
 logs-worker:
 	docker compose logs -f worker
 
+logs-frontend:
+	docker compose logs -f web
+
 seed:
 	@chmod +x scripts/setup_sources.sh
 	./scripts/setup_sources.sh
@@ -65,4 +69,4 @@ shell-api:
 shell-worker:
 	docker compose exec worker celery -A core inspect active
 
-.PHONY: help up down build restart makemigrations migrate test-backend test-frontend test logs logs-api logs-worker seed shell-api shell-worker
+.PHONY: help up down build restart makemigrations migrate test-backend test-frontend test logs logs-api logs-worker logs-frontend seed shell-api shell-worker

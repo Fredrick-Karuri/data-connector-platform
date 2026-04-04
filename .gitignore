@@ -153,3 +153,6 @@ static/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Next.js
+.next/
