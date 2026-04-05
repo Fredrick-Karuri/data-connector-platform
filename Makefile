@@ -18,9 +18,11 @@ help:
 	@echo "  make seed            # setup mock sources + load django fixtures"
 	@echo "  make shell-api       # open django shell"
 	@echo "  make shell-worker    # inspect celery worker"
+	@echo "  make clean           # remove containers, volumes, images, cache"
 
 up:
 	docker compose up -d --build
+	@echo "Stack running → http://localhost:3000"
 
 down:
 	docker compose down
@@ -43,8 +45,10 @@ test-frontend:
 	docker compose exec web npm test
 
 test:
-	docker compose exec api pytest
-	docker compose exec web npm test
+	@echo "── Backend ──────────────────────"
+	docker compose exec api pytest --tb=short
+	@echo "── Frontend ─────────────────────"
+	docker compose exec web npm test -- --watchAll=false
 
 logs:
 	docker compose logs -f api worker
@@ -69,4 +73,9 @@ shell-api:
 shell-worker:
 	docker compose exec worker celery -A core inspect active
 
-.PHONY: help up down build restart makemigrations migrate test-backend test-frontend test logs logs-api logs-worker logs-frontend seed shell-api shell-worker
+clean:
+	docker compose down -v --rmi local
+	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null; true
+	find . -name "*.pyc" -delete 2>/dev/null; true
+
+.PHONY: help up down build restart makemigrations migrate test-backend test-frontend test logs logs-api logs-worker logs-frontend seed shell-api shell-worker clean

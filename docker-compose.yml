@@ -38,7 +38,7 @@ services:
     working_dir: /app
     volumes:
       - ./app/backend:/app
-      - file_exports:/storage
+      - ./app/backend/storage:/storage
     depends_on:
       app_postgres:
         condition: service_healthy
@@ -65,7 +65,7 @@ services:
     working_dir: /app
     volumes:
       - ./app/backend:/app
-      - file_exports:/storage
+      - ./app/backend/storage:/storage
     depends_on:
       - api
       - redis
@@ -174,8 +174,6 @@ services:
 # ─────────────────────────────────────────────
 volumes:
   postgres_data:
-    driver: local
-  file_exports:
     driver: local
 
 # ─────────────────────────────────────────────
