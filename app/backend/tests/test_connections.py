@@ -1,5 +1,5 @@
 """
-DCP-09 | tests/test_connections.py
+tests/test_connections.py
 Tests: list, create, test-only, retest, RBAC enforcement.
 """
 from unittest.mock import patch

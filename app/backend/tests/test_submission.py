@@ -1,5 +1,5 @@
 """
-DCP-11 | tests/test_submission.py
+tests/test_submission.py
 Tests: dual storage write, atomic rollback on file failure, diff computation.
 Design ref: p.10-11, p.23 (atomic transaction test case)
 """

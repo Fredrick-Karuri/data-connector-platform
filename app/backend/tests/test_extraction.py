@@ -1,5 +1,5 @@
 """
-DCP-10 | tests/test_extraction.py
+tests/test_extraction.py
 Tests: POST /api/extract/, GET /api/jobs/{id}/, Celery task logic.
 """
 import json
