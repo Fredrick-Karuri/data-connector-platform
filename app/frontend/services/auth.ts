@@ -1,6 +1,6 @@
 // DCP-03 | services/auth.ts
 
-import { apiClient, storeTokens, clearTokens } from "./apiClient";
+import { apiClient, storeTokens, clearTokens, getStoredTokens } from "./apiClient";
 import type { AuthTokens, AuthUser } from "@/types";
 
 export async function login(username: string, password: string): Promise<AuthUser> {
@@ -12,6 +12,16 @@ export async function login(username: string, password: string): Promise<AuthUse
   return data.user;
 }
 
+// export async function logout(): Promise<void> {
+//   clearTokens();
+// }
+
 export async function logout(): Promise<void> {
+  const tokens = getStoredTokens();
+  if (tokens?.refresh) {
+    try {
+      await apiClient.post("/api/auth/logout/", { refresh: tokens.refresh });
+    } catch { /* ignore — clear locally regardless */ }
+  }
   clearTokens();
 }

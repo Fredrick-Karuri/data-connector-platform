@@ -1,38 +1,80 @@
-# Data Connector Platform (DCP)
-A high-performance Django/DRF platform for extracting and transforming data from heterogeneous sources (Postgres, MySQL, MongoDB, ClickHouse).
-## 🚀 Quick Start (Dev Container)
-The easiest way to develop is using **VS Code Dev Containers**:1. Open this folder in VS Code.2. Click **"Reopen in Container"** when prompted.3. Once the container starts, run:
-   ```bash
-   make up
-   make backend-migrate
+# Data Connector Platform
 
-## 🛠 Tech Stack
+A bridge between heterogeneous data sources (PostgreSQL, MySQL, MongoDB, ClickHouse) and a unified editable grid interface with dual-storage exports.
 
-* Backend: Django 5.x / Django REST Framework
-* Auth: JWT (SimpleJWT) with RBAC roles
-* Async Processing: Celery + Redis (Handles 100MB+ extractions)
-* Databases: PostgreSQL (Core), ClickHouse, MongoDB, MySQL (Mock Sources)
-* DevOps: Docker Compose, Makefile, Dev Containers
+## Quick Start
 
-## 📂 Project Structure
+```bash
+cp .env.example .env          # fill in DJANGO_SECRET_KEY
+make build                    # build all Docker images
+make up                       # start the full stack
+make migrate                  # run Django migrations
+make seed                     # populate mock source databases
+```
 
-* app/backend/: Django source code
-* app/frontend/: Next.js frontend
-* scripts/: SQL/JS seed scripts for mock databases
-* storage/: Local volume for exported data files (CSV/JSON)
+Then open http://localhost:3000 — register an account and start extracting.
 
-## ⌨️ Common Commands (via Makefile)
+## Architecture
 
-| Command [3, 4, 5] | Description |
+| Layer | Technology |
 |---|---|
-| make up | Start all services (API, Workers, DBs) |
-| make restart | Rebuild and restart containers |
-| make backend-migrate | Run Django migrations inside the container |
-| make backend-test | Run pytest suite |
-| make seed | Load initial fixtures and mock data |
+| Frontend | Next.js 14, TanStack Table, Axios |
+| API | Django REST Framework + JWT |
+| Workers | Celery + Redis |
+| App DB | PostgreSQL (JSONB for flexible schemas) |
+| Mock Sources | PostgreSQL, MySQL, MongoDB, ClickHouse |
+| File Storage | Docker volume `/storage` |
 
-## 🏗 System Design Constraints
+## Environment Variables
 
-* Batch Limits: Max 10,000 rows or 100MB per extraction request.
-* Security: Roles are embedded in JWT payloads for sub-millisecond RBAC checks.
-* Patterns: Uses a Factory Pattern for database connectors to support easy scaling of source types.
+| Variable | Description |
+|---|---|
+| `DJANGO_SECRET_KEY` | Django secret (required) |
+| `DATABASE_URL` | App PostgreSQL DSN |
+| `CELERY_BROKER_URL` | Redis broker URL |
+| `STORAGE_ROOT` | File export path (default `/storage`) |
+| `BATCH_MAX_ROWS` | Max rows per extraction (default 10,000) |
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register/` | Create account |
+| POST | `/api/auth/token/` | Login → JWT tokens |
+| GET | `/api/connections/` | List connections |
+| POST | `/api/connections/test/` | Test credentials |
+| POST | `/api/extract/` | Start extraction job |
+| GET | `/api/jobs/{id}/` | Poll job status |
+| POST | `/api/submit-batch/` | Dual-storage write |
+| GET | `/api/files/` | List accessible files |
+| GET | `/api/files/{id}/download/` | Download (RBAC gated) |
+
+## Make Commands
+
+```bash
+make build        # Build Docker images
+make up           # Start all services
+make down         # Stop and remove volumes
+make seed         # Seed all 4 mock source databases
+make migrate      # Run Django migrations
+make test         # Run full test suite (backend + frontend)
+make logs         # Tail API and worker logs
+make shell-api    # Django shell
+```
+
+## Adding a New Database Type
+
+1. Create `app/backend/connectors/drivers/snowflake.py` extending `BaseConnector`
+2. Add one entry to `DRIVER_MAP` in `connectors/factory.py`
+
+No other files need changing (Factory Pattern, design p.4-5).
+
+## Test Suite
+
+```bash
+# Backend (98 tests)
+docker-compose exec api pytest
+
+# Frontend (36 tests)
+docker-compose exec web npm test
+```

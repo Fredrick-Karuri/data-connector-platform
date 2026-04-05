@@ -1,5 +1,5 @@
 """
-DCP-12 | tests/test_files.py
+tests/test_files.py
 Tests: list, download RBAC (admin/owner/shared/forbidden), share endpoint.
 Design ref: p.12 — the three-step gatekeeper.
 """
