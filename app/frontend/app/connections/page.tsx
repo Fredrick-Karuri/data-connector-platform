@@ -6,6 +6,8 @@ import { ConnectionCard } from "@/components/ConnectionCard";
 import { AddConnectionModal } from "@/components/AddConnectionModal";
 import { apiClient } from "@/services/apiClient";
 import type { Connection } from "@/types";
+import { AuthGuard } from "@/components/AuthGuard";
+
 import "./connections.css";
 
 export default function ConnectionsPage() {
@@ -35,6 +37,7 @@ export default function ConnectionsPage() {
   const untested = connections.filter(c => c.status === "Untested").length;
 
   return (
+    <AuthGuard>
     <div className="page">
       {/* ── Header ── */}
       <div className="page-header">
@@ -129,5 +132,6 @@ export default function ConnectionsPage() {
         />
       )}
     </div>
+    </AuthGuard>
   );
 }

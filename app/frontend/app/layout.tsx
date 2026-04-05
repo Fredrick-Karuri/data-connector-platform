@@ -1,8 +1,15 @@
-// app/layout.tsx
+import { AuthProvider } from "@/contexts/AuthContext";
+import { NavBar } from "@/components/NavBar";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          <NavBar />
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

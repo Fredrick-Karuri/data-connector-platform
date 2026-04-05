@@ -1,4 +1,4 @@
-// DCP-15 | app/extract/page.tsx
+// app/extract/page.tsx
 // Query form → POST /api/extract/ → poll status → populate EditableGrid
 // Design ref: p.6-8, p.15 (job polling), p.20 (endpoints)
 "use client";
@@ -12,6 +12,7 @@ import { EditableGrid }    from "@/components/EditableGrid";
 import { JobProgressBar }  from "@/components/JobProgressBar";
 import type { DbType }     from "@/types";
 import "./extract.css";
+import { AuthGuard } from "@/components/AuthGuard";
 
 const QUERY_PLACEHOLDERS: Record<string, string> = {
   postgres:   "SELECT * FROM inventory_items LIMIT 500",
@@ -212,8 +213,10 @@ function ExtractPageInner() {
 
 export default function ExtractPage() {
   return (
+    <AuthGuard>
     <Suspense>
       <ExtractPageInner />
     </Suspense>
+    </AuthGuard>
   );
 }

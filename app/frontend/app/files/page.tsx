@@ -1,4 +1,4 @@
-// DCP-16 | app/files/page.tsx
+// app/files/page.tsx
 // Lists files accessible to the current user (owner + shared).
 // Download triggers GET /api/files/{id}/download/ — RBAC checked server-side (design p.12).
 "use client";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useFiles } from "@/hooks/useFiles";
 import type { FileMetadata } from "@/types";
 import "./files.css";
+import { AuthGuard } from "@/components/AuthGuard";
 
 const FORMAT_ICON: Record<string, string> = { csv: "⊞", json: "{ }" };
 
@@ -42,6 +43,8 @@ export default function FilesPage() {
   };
 
   return (
+    <AuthGuard>
+    
     <div className="files-page">
       {/* ── Header ── */}
       <div className="files-header">
@@ -134,6 +137,7 @@ export default function FilesPage() {
         <a href="/extract"    className="nav-link">Extract →</a>
       </div>
     </div>
+    </AuthGuard>
   );
 }
 
