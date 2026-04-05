@@ -1,5 +1,5 @@
 """
-DCP-17 | tests/test_rbac_unit.py
+tests/test_rbac_unit.py
 Unit tests for RBAC permission classes and gatekeeper logic.
 Design ref: p.23 — "User role receives 403 Forbidden when accessing
 a file_id owned by another user"
@@ -7,7 +7,6 @@ a file_id owned by another user"
 import uuid
 from unittest.mock import MagicMock
 
-import pytest
 from django.test import TestCase
 
 from api.models import FileAccessControl, FileMetadata, User

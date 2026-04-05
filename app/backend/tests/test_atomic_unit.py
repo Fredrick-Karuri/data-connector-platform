@@ -1,12 +1,11 @@
 """
-DCP-17 | tests/test_atomic_unit.py
+tests/test_atomic_unit.py
 Unit tests for the dual-storage atomic transaction guarantee.
 Design ref: p.23 — "intentionally fail the file-write step to ensure the
 database record is correctly rolled back"
 Also covers the SystemLogs audit trail on failure.
 """
 import os
-import uuid
 from unittest.mock import patch
 
 from django.test import TestCase, override_settings

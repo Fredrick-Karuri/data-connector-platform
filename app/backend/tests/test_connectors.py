@@ -1,5 +1,5 @@
 """
-DCP-17 | tests/test_connectors.py
+tests/test_connectors.py
 Unit tests for BaseConnector implementations.
 Design ref: p.23 — "each driver tested against mock DB to verify fetch_batch
 returns standardised JSON"
@@ -7,7 +7,7 @@ returns standardised JSON"
 import datetime
 import decimal
 import uuid
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
