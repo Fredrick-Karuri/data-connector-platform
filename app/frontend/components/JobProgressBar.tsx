@@ -1,5 +1,5 @@
-// DCP-15 | components/JobProgressBar.tsx
 "use client";
+import { progress as p } from "@/styles/components";
 import type { JobStatus } from "@/types";
 
 interface Props {
@@ -10,44 +10,36 @@ interface Props {
 }
 
 const STATUS_LABEL: Record<string, string> = {
-  PENDING:  "Queued",
-  PROGRESS: "Extracting",
-  SUCCESS:  "Complete",
-  FAILED:   "Failed",
+  PENDING: "Queued", PROGRESS: "Extracting", SUCCESS: "Complete", FAILED: "Failed",
+};
+
+const STATUS_CLASS: Record<string, string> = {
+  PENDING: p.statusPending, PROGRESS: p.statusProgress,
+  SUCCESS: p.statusSuccess, FAILED: p.statusFailed,
 };
 
 export function JobProgressBar({ status, progress, jobId, error }: Props) {
   if (!status) return null;
 
-  const pct        = Math.min(Math.max(progress, 0), 100);
-  const isActive   = status === "PENDING" || status === "PROGRESS";
-  const isFailed   = status === "FAILED";
-  const isSuccess  = status === "SUCCESS";
+  const pct       = Math.min(Math.max(progress, 0), 100);
+  const isActive  = status === "PENDING" || status === "PROGRESS";
+  const isFailed  = status === "FAILED";
+
+  const fillClass = isFailed ? p.fillFailed : isActive ? p.fillAnimated : p.fill;
 
   return (
-    <div className="progress-wrap">
-      <div className="progress-meta">
-        <span className={`progress-status ${status?.toLowerCase()}`}>
+    <div className={p.wrap}>
+      <div className={p.meta}>
+        <span className={STATUS_CLASS[status] ?? p.statusDefault}>
           {STATUS_LABEL[status] ?? status}
         </span>
-        {jobId && (
-          <span className="progress-jobid">
-            job: {jobId.slice(0, 8)}…
-          </span>
-        )}
-        {isActive && <span className="progress-pct">{pct}%</span>}
+        {jobId && <span className={p.jobId}>job: {jobId.slice(0, 8)}…</span>}
+        {isActive && <span className={p.pct}>{pct}%</span>}
       </div>
-
-      <div className="progress-track">
-        <div
-          className={`progress-fill ${isFailed ? "failed" : ""} ${isActive ? "animated" : ""}`}
-          style={{ width: `${isActive ? Math.max(pct, 5) : 100}%` }}
-        />
+      <div className={p.track}>
+        <div className={fillClass} style={{ width: `${isActive ? Math.max(pct, 5) : 100}%` }} />
       </div>
-
-      {isFailed && error && (
-        <div className="progress-error">{error}</div>
-      )}
+      {isFailed && error && <div className={p.error}>{error}</div>}
     </div>
   );
 }
