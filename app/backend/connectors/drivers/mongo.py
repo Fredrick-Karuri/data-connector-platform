@@ -1,5 +1,5 @@
 """
-DCP-08 | connectors/drivers/mongo.py
+connectors/drivers/mongo.py
 MongoDB driver using pymongo with document flattening (design p.4-6, p.9).
 flatten_mongo_doc() converts nested docs/arrays to dot-notation for the grid.
 """

@@ -1,5 +1,5 @@
 """
-DCP-08 | connectors/drivers/mysql.py
+connectors/drivers/mysql.py
 MySQL driver using mysql-connector-python (design p.4-6).
 """
 from collections.abc import Generator

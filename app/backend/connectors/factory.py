@@ -1,5 +1,5 @@
 """
-DCP-08 | connectors/factory.py
+connectors/factory.py
 ConnectorFactory — instantiates the correct driver based on db_type.
 Design ref: p.4-5 — "adding Snowflake requires one new driver class, no other changes."
 

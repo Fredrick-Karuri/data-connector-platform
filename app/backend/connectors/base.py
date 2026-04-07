@@ -1,5 +1,5 @@
 """
-DCP-08 | connectors/base.py
+connectors/base.py
 Abstract BaseConnector — defines the interface all drivers must implement.
 Design ref: p.4-5 — Factory Pattern, one class per driver.
 """

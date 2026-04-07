@@ -1,5 +1,5 @@
 """
-DCP-11 | services/submission.py
+services/submission.py
 SubmissionService.execute() — the "Two-Phase" write (design p.10-11):
   Phase A: Validate diff map
   Phase B: Upsert rows into ProcessedRecord (PostgreSQL)
@@ -12,7 +12,6 @@ If DB write fails → temp file is deleted before response (design p.11).
 import csv
 import hashlib
 import json
-import logging
 import os
 import uuid
 from datetime import datetime, timezone
@@ -23,7 +22,8 @@ from django.db import transaction
 from api.exceptions import PersistenceError
 from api.models import ExtractionJob, FileMetadata, ProcessedRecord, User
 
-logger = logging.getLogger(__name__)
+from core.logging import get_logger
+logger = get_logger(__name__)
 
 
 class SubmissionService:

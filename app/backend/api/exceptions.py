@@ -1,17 +1,17 @@
 """
-DCP-19 | api/exceptions.py
+api/exceptions.py
 Full custom exception hierarchy + DRF handler (design p.21).
 Categories: ConnectionError→400, ExtractionError→422,
             TransformationError→log+flag, PersistenceError→500+rollback
 """
-import logging
 
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
-logger = logging.getLogger(__name__)
+from core.logging import get_logger
+logger = get_logger(__name__)
 
 
 # ── Exception classes ─────────────────────────────────────────────────────────

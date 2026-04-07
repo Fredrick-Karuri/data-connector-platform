@@ -1,5 +1,5 @@
 """
-DCP-05 | api/models.py
+api/models.py
 Core models: User, Connection, ExtractionJob, ProcessedRecord, FileMetadata, FileAccessControl
 Design ref: p.13-14 (schema), p.4 (Connection), p.6 (ExtractionJob), p.10-11 (File), p.12 (RBAC)
 """

@@ -1,5 +1,5 @@
 """
-DCP-09 | api/views/connections.py
+api/views/connections.py
 GET /api/connections/      — list all connections for authed user
 POST /api/connections/     — create, runs test_connection() before saving
 POST /api/connections/test/ — validate only, no save

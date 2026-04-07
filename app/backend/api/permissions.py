@@ -1,5 +1,5 @@
 """
-DCP-06 | api/permissions.py
+api/permissions.py
 RBAC permission classes (design p.12 — "User vs Admin" model).
 Used by file download gatekeeper in DCP-12.
 """

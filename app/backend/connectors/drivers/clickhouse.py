@@ -1,5 +1,5 @@
 """
-DCP-08 | connectors/drivers/clickhouse.py
+connectors/drivers/clickhouse.py
 ClickHouse driver using clickhouse-driver for OLAP-speed batching (design p.4-6).
 """
 from collections.abc import Generator

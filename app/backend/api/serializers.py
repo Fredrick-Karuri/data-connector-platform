@@ -1,5 +1,5 @@
 """
-DCP-06 | api/serializers.py
+api/serializers.py
 Serializers for all models + JWT role injection.
 Design ref: p.4 (Connection), p.6 (ExtractionJob), p.10-11 (FileMetadata), p.12 (RBAC)
 """

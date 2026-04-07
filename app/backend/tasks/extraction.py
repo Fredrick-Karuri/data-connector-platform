@@ -1,12 +1,10 @@
 """
-DCP-10 | tasks/extraction.py
+tasks/extraction.py
 Celery task: picks up extraction jobs, streams data in chunks,
 caches result in Redis for the frontend to poll.
 Design ref: p.6-7 (async task), p.21 (circuit breaker — 60s limit, 3 retries, exponential backoff)
 """
 import json
-import logging
-from datetime import datetime
 
 from celery import shared_task
 from django.conf import settings
@@ -17,7 +15,9 @@ from api.exceptions import ConnectionError as DCPConnectionError, ExtractionErro
 from api.models import ExtractionJob
 from connectors.factory import ConnectorFactory
 
-logger = logging.getLogger(__name__)
+from core.logging import get_logger
+logger = get_logger(__name__)
+
 
 PREVIEW_ROWS = 10           # Rows stored on job for grid init
 REDIS_TTL    = 60 * 60 * 2  # Cache result for 2 hours
