@@ -135,25 +135,3 @@ make test         # Run backend + frontend test suites
 make logs         # Tail API and worker logs
 make shell-api    # Open Django shell
 ```
-
----
-
-## Running Tests
-
-```bash
-# Backend
-docker compose exec api pytest
-
-# Frontend
-docker compose exec web npm test
-```
-
----
-
-## Adding a New Connector
-
-1. Create `app/backend/connectors/drivers/<name>.py` extending `BaseConnector`
-2. Implement `connect()`, `disconnect()`, `test_connection()`, `fetch_batch()`, `fetch_chunks()`
-3. Register it in `DRIVER_MAP` in `connectors/factory.py`
-
-No other files need changing.

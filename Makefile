@@ -2,6 +2,8 @@
 
 help:
 	@echo "Usage:"
+	help:
+	@echo "  make dev             # build, start, migrate, seed (full setup)"
 	@echo "  make up              # start full stack"
 	@echo "  make down            # stop containers"
 	@echo "  make build           # build images"
@@ -20,8 +22,11 @@ help:
 	@echo "  make shell-worker    # inspect celery worker"
 	@echo "  make clean           # remove containers, volumes, images, cache"
 
+dev: build up migrate seed
+	@echo "── DCP ready → http://localhost:3000"
+
 up:
-	docker compose up -d --build
+	docker compose up -d
 	@echo "Stack running → http://localhost:3000"
 
 down:
@@ -37,6 +42,9 @@ makemigrations:
 
 migrate:
 	docker compose exec api python manage.py migrate
+
+createsuperuser:
+	docker compose exec api python manage.py createsuperuser
 
 test-backend:
 	docker compose exec api pytest -q
@@ -65,7 +73,6 @@ logs-frontend:
 seed:
 	@chmod +x scripts/setup_sources.sh
 	./scripts/setup_sources.sh
-	docker compose exec api python manage.py loaddata /app/fixtures/seed.json
 
 shell-api:
 	docker compose exec api python manage.py shell
@@ -78,4 +85,4 @@ clean:
 	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null; true
 	find . -name "*.pyc" -delete 2>/dev/null; true
 
-.PHONY: help up down build restart makemigrations migrate test-backend test-frontend test logs logs-api logs-worker logs-frontend seed shell-api shell-worker clean
+.PHONY: help up down build restart dev makemigrations migrate test-backend test-frontend test logs logs-api logs-worker logs-frontend seed shell-api shell-worker clean

@@ -120,6 +120,32 @@ else
   log "ClickHouse: seed complete. Total rows: $CH_COUNT"
 fi
 
+# ── Django Users ───────────────────────────────────────────────────────────────
+setup_django_users() {
+  log "Creating Django users..."
+  docker exec dcp_api python manage.py shell -c "
+from api.models import User
+
+if not User.objects.filter(username='admin').exists():
+    User.objects.create_superuser('admin', password='admin1234')
+    print('admin created')
+else:
+    u = User.objects.get(username='admin')
+    u.set_password('admin1234')
+    u.save()
+    print('admin password reset')
+
+if not User.objects.filter(username='testuser').exists():
+    User.objects.create_user('testuser', password='user1234', role='user')
+    print('testuser created')
+else:
+    print('testuser already exists')
+"
+  log "Users ready — admin:admin1234 / testuser:user1234"
+}
+
+setup_django_users
+
 # ── Summary ────────────────────────────────────────────────────────────────────
 echo ""
 log "All mock sources ready. Environment is set to extract immediately."
