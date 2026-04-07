@@ -9,7 +9,6 @@ import type { DiffMap, Row } from "@/types";
 export interface DiffTrackerResult {
   /** Current in-memory state of all rows (original + edits applied) */
   rows: Row[];
-  /** Raw diff map — only changed cells */
   diffMap: DiffMap;
   updateCell: (rowId: string, field: string, value: unknown) => void;
   markDeleted: (rowId: string) => void;
@@ -22,7 +21,6 @@ export interface DiffTrackerResult {
 }
 
 export function useDiffTracker(initialRows: Row[]): DiffTrackerResult {
-  // const [originalRows]   = useState<Row[]>(initialRows);
   const [originalRows, setOriginalRows] = useState<Row[]>(initialRows);
   const [diffMap, setDiffMap] = useState<DiffMap>({});
   const [nullableFields, setNullableFields] = useState<string[]>([]);
@@ -76,12 +74,30 @@ export function useDiffTracker(initialRows: Row[]): DiffTrackerResult {
     });
   }, [originalRows]);
 
-  const markDeleted = useCallback((rowId: string) => {
-    setDiffMap(prev => ({
+const markDeleted = useCallback((rowId: string) => {
+  setDiffMap(prev => {
+    const isDeleted = Boolean(prev[rowId]?.["_deleted"]?.new);
+
+    if (isDeleted) {
+      // Remove the _deleted entry
+      const next = { ...prev };
+      if (next[rowId]) {
+        const { _deleted, ...rest } = next[rowId];
+        if (Object.keys(rest).length === 0) {
+          delete next[rowId];
+        } else {
+          next[rowId] = rest;
+        }
+      }
+      return next;
+    }
+
+    return {
       ...prev,
       [rowId]: { ...(prev[rowId] ?? {}), _deleted: { old: false, new: true } },
-    }));
-  }, []);
+    };
+  });
+}, []);
 
   const resetDiffs = useCallback(() => setDiffMap({}), []);
 
@@ -113,10 +129,25 @@ export function useDiffTracker(initialRows: Row[]): DiffTrackerResult {
     return errors;
   }, [rows, nullableFields]);
 
-  const getSubmitPayload = useCallback(() => ({
+const getSubmitPayload = useCallback(() => {
+  // 1. Filter out rows marked for deletion
+  // 2. Remove the internal '_deleted' key from the objects
+  const modifiedData = rows
+    .filter((row, idx) => {
+      const rowId = _rowId(row, idx);
+      return diffMap[rowId]?.["_deleted"]?.new !== true;
+    })
+    .map(row => {
+      const { _deleted, ...cleanRow } = row as Row & { _deleted?: unknown };
+      return cleanRow;
+    });
+
+  return {
     original_data: originalRows,
-    modified_data: rows,
-  }), [originalRows, rows]);
+    modified_data: modifiedData,
+  };
+}, [originalRows, rows, diffMap]);
+
 
   return {
     rows,

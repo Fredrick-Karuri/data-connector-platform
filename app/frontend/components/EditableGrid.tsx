@@ -123,7 +123,10 @@ export function EditableGrid({
 
   const hasErrors = Object.keys(rowErrors).length > 0;
   const dirtyCount = Object.keys(diffMap).length;
-  const canSubmit = isDirty && !hasErrors && !submitting;
+  // const canSubmit = isDirty && !hasErrors && !submitting;
+  // Allow submit if there are rows, no validation errors, and not already submitting
+const canSubmit = rows.length > 0 && !hasErrors && !submitting;
+
 
   const apiRowErrors = useMemo<Set<string>>(() => {
     if (!submitError?.row_errors) return new Set();
