@@ -78,3 +78,10 @@ docker-compose exec api pytest
 # Frontend (36 tests)
 docker-compose exec web npm test
 ```
+## Documentation
+
+Detailed guides and design specs can be found in the `/Docs` directory:
+
+- [**System Setup**](./Docs/setup.md) — Environment config, port mappings, and seeding.
+- [**System Design**](./Docs/system-design.md) — Architecture, flattening strategies, and API contracts.
+ 
