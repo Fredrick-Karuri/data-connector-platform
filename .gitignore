@@ -157,3 +157,6 @@ static/
 # Next.js
 .next/
 .swc/
+
+# Ignore local backend storage
+app/backend/storage/
