@@ -1,4 +1,4 @@
-// DCP-15 | hooks/useSubmission.ts
+// hooks/useSubmission.ts
 // Wraps POST /api/submit-batch/ — used by ExtractPage after editing.
 "use client";
 import { useState, useCallback } from "react";

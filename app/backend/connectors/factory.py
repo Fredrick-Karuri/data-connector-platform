@@ -54,7 +54,7 @@ class ConnectorFactory:
     def test(db_type: str, config: dict) -> bool:
         """
         Convenience: instantiate driver and run test_connection() in one call.
-        Used by POST /api/connections/test/ (DCP-09).
+        Used by POST /api/connections/test/.
         """
         connector = ConnectorFactory.get(db_type, config)
         return connector.test_connection()

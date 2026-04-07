@@ -228,7 +228,7 @@ class TestFlattenMongoDoc:
         assert flatten_mongo_doc({}) == {}
 
     def test_mixed_nested_document(self):
-        """Exercises the full seed data shape from user_logs (DCP-04)."""
+        """Exercises the full seed data shape from user_logs ."""
         doc = {
             "_id":       "abc123",
             "user":      {"id": "u1", "username": "alice"},

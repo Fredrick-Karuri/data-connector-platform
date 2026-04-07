@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DCP-04 | scripts/setup_sources.sh
+# scripts/setup_sources.sh
 # Waits for all mock source containers to be healthy, then verifies seed data.
 # Called manually via: make seed
 # Design ref: p.23 — "setup_sources.sh runs during docker-compose up phase"

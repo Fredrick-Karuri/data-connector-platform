@@ -1,7 +1,7 @@
-// DCP-04 | scripts/seed_mongo.js
+// scripts/seed_mongo.js
 // Mock source: MongoDB — user_logs
 // Unique type test: Arrays & Nested Objects (design p.23)
-// Exercises flatten_mongo_doc() implemented in DCP-08 (design p.9)
+// Exercises flatten_mongo_doc()
 
 db = db.getSiblingDB("mock_mongo_db");
 

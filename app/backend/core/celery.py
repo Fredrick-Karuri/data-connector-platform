@@ -1,5 +1,5 @@
 """
-DCP-02 | core/celery.py
+core/celery.py
 Celery application instance — shared across api and worker containers.
 """
 import os

@@ -1,4 +1,4 @@
-// DCP-14 | hooks/useDiffTracker.ts
+// hooks/useDiffTracker.ts
 // Maintains a DiffMap of cell edits without triggering backend calls per keystroke.
 // Design ref: p.8 — Local Diff Tracking
 // DiffMap shape: { row_id: { field_name: { old: val, new: val } } }

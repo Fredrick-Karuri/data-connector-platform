@@ -1,7 +1,7 @@
 """
 api/permissions.py
 RBAC permission classes (design p.12 — "User vs Admin" model).
-Used by file download gatekeeper in DCP-12.
+Used by file download gatekeeper.
 """
 from rest_framework.permissions import BasePermission
 from .models import User as AppUser

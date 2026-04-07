@@ -1,6 +1,6 @@
 """
 Data Connector Platform — Django Settings
-DCP-02 | core/settings.py
+core/settings.py
 """
 import os
 from datetime import timedelta
@@ -63,7 +63,6 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
-    # Custom exception handler wired in DCP-19
     "EXCEPTION_HANDLER": "api.exceptions.custom_exception_handler",
 }
 

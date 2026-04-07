@@ -63,7 +63,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class ConnectionSerializer(serializers.ModelSerializer):
     """
-    Validates connection config before the ConnectorFactory tests it (DCP-09).
+    Validates connection config before the ConnectorFactory tests it.
     config is JSONB — different shapes per db_type (design p.5).
     """
     owner = UserSerializer(read_only=True)
@@ -182,7 +182,7 @@ class ProcessedRecordSerializer(serializers.ModelSerializer):
 
 class FileMetadataSerializer(serializers.ModelSerializer):
     """
-    Read-only — FileMetadata is created exclusively by SubmissionService (DCP-11).
+    Read-only — FileMetadata is created exclusively by SubmissionService.
     owner resolved from JWT; file_path never exposed to client (security).
     """
     owner = UserSerializer(read_only=True)
