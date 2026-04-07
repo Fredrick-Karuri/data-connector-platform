@@ -54,13 +54,12 @@ export function useExtraction() {
       );
 
       if (job.status === "SUCCESS") {
-        const jobWithRows = job as ExtractionJob & { rows?: Row[] };
         setState(prev => ({
           ...prev,
           loading:  false,
           status:   "SUCCESS",
           progress: 100,
-          rows:     jobWithRows.rows ?? job.result_preview ?? [],
+          rows:     job.rows ?? job.result_preview ?? [],
         }));
       }
 

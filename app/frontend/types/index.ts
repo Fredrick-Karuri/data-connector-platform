@@ -1,4 +1,4 @@
-// DCP-03 | types/index.ts
+// types/index.ts
 // Shared types aligned with backend models (design p.13-14)
 
 export type UserRole = "admin" | "user";
@@ -36,6 +36,9 @@ export interface ExtractionJob {
   batch_size: number;
   status: JobStatus;
   result_preview: Row[] | null;
+  rows?: Row[];
+  progress?: number;
+  cache_expired?: boolean;
   created_at: string;
 }
 
