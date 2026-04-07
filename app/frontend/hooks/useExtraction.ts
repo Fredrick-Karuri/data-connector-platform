@@ -1,4 +1,4 @@
-// DCP-15 | hooks/useExtraction.ts
+// hooks/useExtraction.ts
 // Wraps POST /api/extract/ → pollJob() → populates grid rows.
 // Design ref: p.6-7 — job_id returned immediately, 2s polling until SUCCESS/FAILED
 "use client";
@@ -54,13 +54,12 @@ export function useExtraction() {
       );
 
       if (job.status === "SUCCESS") {
-        const jobWithRows = job as ExtractionJob & { rows?: Row[] };
         setState(prev => ({
           ...prev,
           loading:  false,
           status:   "SUCCESS",
           progress: 100,
-          rows:     jobWithRows.rows ?? job.result_preview ?? [],
+          rows:     job.rows ?? job.result_preview ?? [],
         }));
       }
 

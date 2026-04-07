@@ -24,7 +24,7 @@
       }
     }
   },
-  "forwardPorts": [8000, 3000, 5432, 6379, 27017, 3306, 8123],
+  "forwardPorts": [8000, 3000, 5432, 6379, 27017, 3306, 8123, 9000],
   "postCreateCommand": {
     "frontend": "npm install --prefix app/frontend",
     "help": "make help"

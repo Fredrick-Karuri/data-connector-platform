@@ -1,5 +1,5 @@
 """
-DCP-08 | connectors/drivers/clickhouse.py
+connectors/drivers/clickhouse.py
 ClickHouse driver using clickhouse-driver for OLAP-speed batching (design p.4-6).
 """
 from collections.abc import Generator
@@ -10,6 +10,10 @@ from clickhouse_driver.errors import NetworkError, ServerException
 from connectors.base import BaseConnector
 from api.exceptions import ConnectionError as DCPConnectionError, ExtractionError
 from typing import cast
+import re
+
+from core.logging import get_logger
+logger = get_logger(__name__)
 
 class ClickHouseConnector(BaseConnector):
 
@@ -52,7 +56,7 @@ class ClickHouseConnector(BaseConnector):
             self.connect()
         assert self._client is not None
         try:
-            paginated = f"{query.rstrip(';')} LIMIT {batch_size} OFFSET {offset}"
+            paginated = f"{self._strip_limit(query)} LIMIT {batch_size} OFFSET {offset}"
             result = cast(
                 tuple[list[tuple[Any, ...]], list[tuple[str, Any]]],
                 self._client.execute(paginated, with_column_types=True)
@@ -72,9 +76,11 @@ class ClickHouseConnector(BaseConnector):
             self.connect()
         assert self._client is not None
         try:
+            clean = self._strip_limit(query)
+            logger.debug("ClickHouse clean query: %r", clean)
             meta = cast(
                 tuple[list[Any], list[tuple[str, Any]]],
-                self._client.execute(f"{query.rstrip(';')} LIMIT 0", with_column_types=True)
+                self._client.execute(f"{clean} LIMIT 0", with_column_types=True)
             )
             col_names = [col[0] for col in meta[1]]
 
@@ -82,7 +88,7 @@ class ClickHouseConnector(BaseConnector):
             chunk: list[dict] = []
             fetched = 0
 
-            for row in self._client.execute_iter(query, settings=settings):
+            for row in self._client.execute_iter(clean, settings=settings):
                 if fetched >= batch_size:
                     break
                 chunk.append(self._normalise_row(dict(zip(col_names, row))))
@@ -104,3 +110,12 @@ class ClickHouseConnector(BaseConnector):
             # IPv4/IPv6 addresses come as strings — safe
             normalised[k] = self._safe_value(v)
         return normalised
+
+
+    def _strip_limit(self, query: str) -> str:
+        return re.sub(
+            r'[\s;]*LIMIT\s+\d+(\s+OFFSET\s+\d+)?[\s;]*$',
+            '',
+            query.strip(),
+            flags=re.IGNORECASE | re.MULTILINE,
+        ).strip()

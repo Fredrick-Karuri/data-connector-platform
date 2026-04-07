@@ -1,9 +1,8 @@
 """
-DCP-11 | api/views/submission.py
+api/views/submission.py
 POST /api/submit-batch/ — triggers dual storage via SubmissionService.
 Design ref: p.10-11, p.20
 """
-import logging
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -13,8 +12,8 @@ from rest_framework.response import Response
 from api.exceptions import PersistenceError
 from api.serializers import FileMetadataSerializer, SubmitBatchSerializer
 from services.submission import SubmissionService
-
-logger = logging.getLogger(__name__)
+from core.logging import get_logger
+logger = get_logger(__name__)
 
 
 @api_view(["POST"])

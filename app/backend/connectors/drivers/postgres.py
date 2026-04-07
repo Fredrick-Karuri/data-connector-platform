@@ -1,8 +1,9 @@
 """
-DCP-08 | connectors/drivers/postgres.py
+connectors/drivers/postgres.py
 PostgreSQL driver using psycopg2 with server-side cursor (design p.4-6).
 """
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 import psycopg2
 import psycopg2.extras
 

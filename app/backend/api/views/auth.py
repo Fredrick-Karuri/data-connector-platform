@@ -1,5 +1,5 @@
 """
-DCP-07 | api/views/auth.py
+api/views/auth.py
 JWT auth endpoints: register, login (token), refresh, logout, me.
 Design ref: p.3 — JWT via DRF for session management and RBAC.
 """

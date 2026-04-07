@@ -3,36 +3,32 @@
 // Design ref: p.8 — Local Diff Tracking
 // DiffMap shape: { row_id: { field_name: { old: val, new: val } } }
 "use client";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import type { DiffMap, Row } from "@/types";
 
 export interface DiffTrackerResult {
   /** Current in-memory state of all rows (original + edits applied) */
   rows: Row[];
-  /** Raw diff map — only changed cells */
   diffMap: DiffMap;
-  /** Update a single cell value — no network call (design p.8) */
   updateCell: (rowId: string, field: string, value: unknown) => void;
-  /** Mark a row as deleted — tracked in diffMap as _deleted: true */
   markDeleted: (rowId: string) => void;
-  /** True if any cell has been changed from its original value */
   isDirty: boolean;
-  /** Rows that have at least one changed field */
   getDirtyRows: () => Row[];
-  /** Reset all edits back to original data */
   resetDiffs: () => void;
-  /** Returns original_data and modified_data for POST /api/submit-batch/ */
   getSubmitPayload: () => { original_data: Row[]; modified_data: Row[] };
-  /** Per-row validation: null = valid, string = error message */
   rowErrors: Record<string, Record<string, string>>;
-  /** Register nullable fields — submit is blocked if these are empty */
   setNullableFields: (fields: string[]) => void;
 }
 
 export function useDiffTracker(initialRows: Row[]): DiffTrackerResult {
-  const [originalRows]   = useState<Row[]>(initialRows);
+  const [originalRows, setOriginalRows] = useState<Row[]>(initialRows);
   const [diffMap, setDiffMap] = useState<DiffMap>({});
   const [nullableFields, setNullableFields] = useState<string[]>([]);
+
+    useEffect(() => {
+    setOriginalRows(initialRows);
+    setDiffMap({}); // Reset edits when new data is loaded
+  }, [initialRows]);
 
   // Apply diffs on top of original rows to produce current view
   const rows = useMemo<Row[]>(() => {
@@ -78,12 +74,30 @@ export function useDiffTracker(initialRows: Row[]): DiffTrackerResult {
     });
   }, [originalRows]);
 
-  const markDeleted = useCallback((rowId: string) => {
-    setDiffMap(prev => ({
+const markDeleted = useCallback((rowId: string) => {
+  setDiffMap(prev => {
+    const isDeleted = Boolean(prev[rowId]?.["_deleted"]?.new);
+
+    if (isDeleted) {
+      // Remove the _deleted entry
+      const next = { ...prev };
+      if (next[rowId]) {
+        const { _deleted, ...rest } = next[rowId];
+        if (Object.keys(rest).length === 0) {
+          delete next[rowId];
+        } else {
+          next[rowId] = rest;
+        }
+      }
+      return next;
+    }
+
+    return {
       ...prev,
       [rowId]: { ...(prev[rowId] ?? {}), _deleted: { old: false, new: true } },
-    }));
-  }, []);
+    };
+  });
+}, []);
 
   const resetDiffs = useCallback(() => setDiffMap({}), []);
 
@@ -115,10 +129,25 @@ export function useDiffTracker(initialRows: Row[]): DiffTrackerResult {
     return errors;
   }, [rows, nullableFields]);
 
-  const getSubmitPayload = useCallback(() => ({
+const getSubmitPayload = useCallback(() => {
+  // 1. Filter out rows marked for deletion
+  // 2. Remove the internal '_deleted' key from the objects
+  const modifiedData = rows
+    .filter((row, idx) => {
+      const rowId = _rowId(row, idx);
+      return diffMap[rowId]?.["_deleted"]?.new !== true;
+    })
+    .map(row => {
+      const { _deleted, ...cleanRow } = row as Row & { _deleted?: unknown };
+      return cleanRow;
+    });
+
+  return {
     original_data: originalRows,
-    modified_data: rows,
-  }), [originalRows, rows]);
+    modified_data: modifiedData,
+  };
+}, [originalRows, rows, diffMap]);
+
 
   return {
     rows,

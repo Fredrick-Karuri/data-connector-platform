@@ -1,11 +1,11 @@
 """
-DCP-10 | api/views/extraction.py
+api/views/extraction.py
 POST /api/extract/        — enqueue Celery task, return job_id immediately
 GET  /api/jobs/{job_id}/  — poll status + retrieve result once SUCCESS
 Design ref: p.6-7, p.20
 """
 import json
-import logging
+
 
 from django.conf import settings
 from django.core.cache import cache
@@ -18,8 +18,8 @@ from api.exceptions import ExtractionError
 from api.models import Connection, ExtractionJob
 from api.serializers import ExtractRequestSerializer, ExtractionJobSerializer
 from tasks.extraction import run_extraction
-
-logger = logging.getLogger(__name__)
+from core.logging import get_logger
+logger = get_logger(__name__)
 
 
 @api_view(["POST"])

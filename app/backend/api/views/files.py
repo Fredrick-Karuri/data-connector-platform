@@ -1,13 +1,12 @@
 """
-DCP-12 | api/views/files.py
+api/views/files.py
 GET /api/files/                  — list files accessible to current user
 GET /api/files/{id}/download/    — RBAC gatekeeper + stream via FileResponse
 POST /api/files/{id}/share/      — grant access to another user
 Design ref: p.11-12 — files never public, UUID filenames, FileResponse streaming
 """
-import logging
 import os
-
+from core.logging import get_logger
 from django.http import FileResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -18,7 +17,8 @@ from api.models import FileAccessControl, FileMetadata, User
 from api.permissions import IsAdmin
 from api.serializers import FileAccessControlSerializer, FileMetadataSerializer
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
+
 
 
 @api_view(["GET"])
