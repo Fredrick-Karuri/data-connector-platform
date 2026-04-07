@@ -1,4 +1,4 @@
-// DCP-15 | hooks/useExtraction.ts
+// hooks/useExtraction.ts
 // Wraps POST /api/extract/ → pollJob() → populates grid rows.
 // Design ref: p.6-7 — job_id returned immediately, 2s polling until SUCCESS/FAILED
 "use client";

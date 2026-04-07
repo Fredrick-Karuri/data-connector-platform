@@ -156,7 +156,10 @@ class SubmitBatchSerializer(serializers.Serializer):
         if not data.get("original_data"):
             raise serializers.ValidationError("original_data cannot be empty.")
 
-        original_keys = set(data["original_data"][0].keys()) if data["original_data"] else set()
+        original_keys = set()
+        for row in data["original_data"]:
+            original_keys.update(row.keys())
+            
         for i, row in enumerate(data.get("modified_data", [])):
             extra = set(row.keys()) - original_keys
             if extra:

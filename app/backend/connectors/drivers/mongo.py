@@ -3,9 +3,10 @@ connectors/drivers/mongo.py
 MongoDB driver using pymongo with document flattening (design p.4-6, p.9).
 flatten_mongo_doc() converts nested docs/arrays to dot-notation for the grid.
 """
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure, OperationFailure
+from pymongo.errors import ConnectionFailure
 import json
 
 from connectors.base import BaseConnector
