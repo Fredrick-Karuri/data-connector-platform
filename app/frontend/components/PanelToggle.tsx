@@ -1,5 +1,7 @@
 "use client";
 import { nav } from "@/styles/components";
+import { Menu, X } from "lucide-react";
+
 
 interface Props {
   open: boolean;
@@ -9,9 +11,7 @@ interface Props {
 export function PanelToggle({ open, onToggle }: Props) {
   return (
     <button className={nav.hamburger} onClick={onToggle} aria-label="Toggle panel">
-      <span className={open ? nav.hamburgerLineTop : nav.hamburgerLine} />
-      <span className={open ? nav.hamburgerLineMid : nav.hamburgerLine} />
-      <span className={open ? nav.hamburgerLineBot : nav.hamburgerLine} />
+      {open ? <X size={14} /> : <Menu size={14} />}
     </button>
   );
 }

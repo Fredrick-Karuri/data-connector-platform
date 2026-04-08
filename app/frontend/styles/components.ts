@@ -17,11 +17,8 @@ export const nav = {
   logout:     `hidden md:block bg-transparent border ${t.border} ${t.textFaint} px-2.5 py-1 text-[0.7rem] font-mono cursor-pointer hover:border-danger hover:${t.textDanger} transition-all`,
 
   // Hamburger — visible on mobile only
-  hamburger:        `md:hidden flex flex-col gap-1 cursor-pointer bg-transparent border-none p-1`,
-  hamburgerLine:    `block w-4 h-px ${t.bgSurfaceAccentMuted} transition-all`,
-  hamburgerLineTop: `block w-4 h-px bg-text-secondary transition-all translate-y-[5px] rotate-45`,
-  hamburgerLineMid: `hidden`,
-  hamburgerLineBot: `block w-4 h-px bg-text-secondary transition-all -translate-y-[1px] -rotate-45`,
+  hamburger: `md:hidden flex items-center justify-center bg-transparent border-none ${t.textFaint} cursor-pointer p-1 hover:${t.textSecondary} transition-colors`,
+  themeToggle: `md:flex hidden items-center justify-center bg-transparent border ${t.border} ${t.textFaint} p-1.5 cursor-pointer hover:${t.textSecondary} hover:border-text-muted transition-all`,
 
   // Mobile drawer
   drawer:          `md:hidden absolute top-full left-0 right-0 ${t.bgBase} border-b ${t.border} flex flex-col z-50`,
