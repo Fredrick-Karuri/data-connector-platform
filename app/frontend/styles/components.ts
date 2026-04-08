@@ -1,16 +1,33 @@
 import { tokens as t } from './tokens';
 
 export const nav = {
-  bar:        `flex items-center gap-6 px-6 py-2.5 border-b ${t.border} ${t.bgBase} font-mono`,
+  bar:        `relative flex items-center gap-6 px-6 py-2.5 border-b ${t.border} ${t.bgBase} font-mono`,
   brand:      `text-[0.7rem] font-medium tracking-[0.2em] ${t.textFaint}`,
-  links:      "flex gap-5 flex-1 ml-4",
+
+  // Desktop — hidden on mobile
+  links:      `hidden md:flex gap-5 flex-1 ml-4`,
   link:       `text-xs ${t.textFaint} no-underline hover:${t.textSecondary} transition-colors`,
   linkActive: `text-xs ${t.textSecondary} no-underline`,
+
+  // User row — hide username/signout on mobile
   user:       "flex items-center gap-3 ml-auto",
   badge:      `text-[0.62rem] px-1.5 py-px border ${t.border} ${t.textFaint}`,
-  badgeAdmin: `text-[0.62rem] px-1.5 py-px ${t.borderAccent} ${t.textAccentLight}`,
-  username:   `text-xs ${t.textMuted}`,
-  logout:     `bg-transparent border ${t.border} ${t.textFaint} px-2.5 py-1 text-[0.7rem] font-mono cursor-pointer hover:border-danger hover:${t.textDanger} transition-all`,
+  badgeAdmin: `text-[0.62rem] px-1.5 py-px border ${t.borderAccent} ${t.textAccentLight}`,
+  username:   `hidden md:block text-xs ${t.textMuted}`,
+  logout:     `hidden md:block bg-transparent border ${t.border} ${t.textFaint} px-2.5 py-1 text-[0.7rem] font-mono cursor-pointer hover:border-danger hover:${t.textDanger} transition-all`,
+
+  // Hamburger — visible on mobile only
+  hamburger:        `md:hidden flex flex-col gap-1 cursor-pointer bg-transparent border-none p-1`,
+  hamburgerLine:    `block w-4 h-px ${t.bgSurfaceAccentMuted} transition-all`,
+  hamburgerLineTop: `block w-4 h-px bg-text-secondary transition-all translate-y-[5px] rotate-45`,
+  hamburgerLineMid: `hidden`,
+  hamburgerLineBot: `block w-4 h-px bg-text-secondary transition-all -translate-y-[1px] -rotate-45`,
+
+  // Mobile drawer
+  drawer:          `md:hidden absolute top-full left-0 right-0 ${t.bgBase} border-b ${t.border} flex flex-col z-50`,
+  drawerLink:      `px-6 py-3 text-xs ${t.textFaint} no-underline border-b ${t.border} font-mono hover:${t.bgRaised} hover:${t.textSecondary} transition-colors`,
+  drawerLinkActive:`px-6 py-3 text-xs ${t.textSecondary} no-underline border-b ${t.border} font-mono border-l-2 border-l-accent-light ${t.bgRaised}`,
+  drawerFooter:    `px-6 py-4 flex items-center gap-3`,
 };
 
 export const progress = {

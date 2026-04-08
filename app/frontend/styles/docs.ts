@@ -1,17 +1,20 @@
 import { tokens as t } from './tokens';
 
 export const s = {
+
   // Layout
-  page:         `grid grid-cols-[200px_1fr] min-h-screen max-w-[1000px] mx-auto`,
+  page:         "grid grid-cols-1 md:grid-cols-[200px_1fr] min-h-screen max-w-[1000px] mx-auto",
+
 
   // Sidebar
-  nav:          `py-8 pr-4 border-r ${t.border} sticky top-0 h-screen overflow-y-auto`,
+  nav:          `hidden md:block py-8 pr-4 border-r ${t.border} sticky top-0 h-screen overflow-y-auto`,
+
   navTitle:     `font-mono text-[0.62rem] ${t.textGhost} uppercase tracking-widest px-3 mb-3`,
   navItem:      `block px-3 py-1.5 text-xs ${t.textFaint} no-underline border-l-2 border-transparent hover:${t.textSecondary} hover:border-l-accent transition-all font-mono`,
   navItemActive:`block px-3 py-1.5 text-xs ${t.textSecondary} no-underline border-l-2 border-l-accent-light font-mono`,
 
   // Content
-  content:      "px-10 py-8 pb-16 flex flex-col gap-0",
+  content:      "px-4 sm:px-10 py-6 sm:py-8 pb-16 flex flex-col gap-0",
   section:      "py-8",
   divider:      `border-none border-t ${t.border}`,
 
@@ -57,7 +60,7 @@ export const s = {
   no:           `text-center ${t.textFaint}`,
 
   // Limits
-  limitsGrid:   `grid grid-cols-4 gap-px ${t.bgOverlay} border ${t.border} my-4`,
+  limitsGrid:   `grid grid-cols-2 sm:grid-cols-4 gap-px ${t.bgOverlay} border ${t.border} my-4`,
   limitCard:    `${t.bgBase} p-4 flex flex-col gap-1`,
   limitNum:     `font-mono text-[1.4rem] ${t.textSecondary}`,
   limitLabel:   `text-[0.68rem] ${t.textFaint}`,

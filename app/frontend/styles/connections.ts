@@ -13,8 +13,9 @@ export const s = {
   btnGhost:    `${t.btnGhost} text-xs px-1.5 py-0.5`,
   btnGhostDanger: `${t.btnGhostDanger} text-xs px-1.5 py-0.5`,
 
+
   // Stats
-  statsRow:    `grid grid-cols-4 gap-px ${t.bgOverlay} border ${t.border} mb-8`,
+  statsRow:    `grid grid-cols-2 lg:grid-cols-4 gap-px ${t.bgOverlay} border ${t.border} mb-8`,
   statCard:    `${t.bgBase} px-5 py-4 flex flex-col gap-0.5`,
   statNum:     `font-mono text-[1.6rem] font-medium ${t.textSecondary}`,
   statHealthy: `font-mono text-[1.6rem] font-medium ${t.textSuccess}`,
@@ -42,7 +43,8 @@ export const s = {
   emptyIcon:   "block text-4xl mb-4 opacity-30",
 
   // Detail panel
-  detailPanel: `fixed right-0 top-0 bottom-0 w-[360px] ${t.bgBase} border-l ${t.border} p-6 overflow-y-auto flex flex-col gap-4`,
+  detailPanel: `fixed right-0 top-0 bottom-0 w-full sm:w-[360px] ${t.bgBase} border-l ${t.border} p-6 overflow-y-auto flex flex-col gap-4`,
+
   detailHeader:"flex items-center justify-between",
   detailTitle: `text-base font-normal ${t.textPrimary}`,
   detailTable: "w-full border-collapse text-[0.78rem]",
@@ -52,15 +54,16 @@ export const s = {
 
   // Modal
   modalOverlay: "fixed inset-0 bg-black/70 flex items-center justify-center z-[100]",
-  modal:        `${t.bgRaised} border ${t.border} w-[480px] max-h-[90vh] overflow-y-auto p-6 flex flex-col gap-3`,
+  modal:       `${t.bgRaised} border ${t.border} w-full sm:w-[480px] max-h-[90vh] overflow-y-auto p-6 flex flex-col gap-3 mx-4 sm:mx-0`,
+
   modalHeader:  "flex items-center justify-between mb-1",
   modalTitle:   `text-sm font-medium ${t.textPrimary} font-mono`,
   fieldLabel:   `text-[0.68rem] ${t.textFaint} uppercase tracking-widest block mb-1`,
   fieldInput:   `w-full ${t.inputBase} px-3 py-2 text-sm`,
-  dbTypeGrid:   "grid grid-cols-4 gap-1",
+  dbTypeGrid:  "grid grid-cols-2 sm:grid-cols-4 gap-1",
   dbTypeBtn:    `${t.bgBase} border ${t.border} ${t.textFaint} py-1.5 text-[0.68rem] font-mono cursor-pointer uppercase tracking-wider hover:${t.borderAccent} hover:${t.textSecondary} transition-all`,
   dbTypeBtnActive: `${t.bgSurfaceAccent} border ${t.borderAccent} ${t.textSecondary} py-1.5 text-[0.68rem] font-mono cursor-pointer uppercase tracking-wider`,
-  fieldsGrid:   "grid grid-cols-2 gap-3",
+  fieldsGrid:  "grid grid-cols-1 sm:grid-cols-2 gap-3",
   span2:        "col-span-2",
   testSuccess:  `font-mono text-xs px-3 py-2 ${t.bgSurfaceSuccess} ${t.textSuccess} border border-[#4ade8033]`,
   testError:    `font-mono text-xs px-3 py-2 ${t.bgSurfaceDanger} ${t.textDanger} border border-[#e05c5c33]`,

@@ -2,10 +2,12 @@ import { tokens as t } from './tokens';
 
 export const s = {
   // Layout
-  page:         `max-w-[1100px] mx-auto px-8 py-10 flex flex-col gap-6`,
+  page:         "max-w-[1100px] mx-auto px-4 sm:px-8 py-6 sm:py-10 flex flex-col gap-6",
+
 
   // Header
-  header:       "flex items-start justify-between gap-4 flex-wrap",
+  header:       "flex flex-col sm:flex-row sm:items-start justify-between gap-4",
+
   title:        `text-[1.75rem] font-light tracking-tight ${t.textPrimary}`,
   sub:          `text-xs ${t.textFaint} mt-0.5`,
   headerActions:"flex items-center gap-2 flex-wrap",
@@ -14,8 +16,8 @@ export const s = {
   btnPrimary:   `${t.btnPrimary} px-4 py-1.5 text-xs no-underline inline-block`,
 
   // Stats
-  stats:        `flex gap-px ${t.bgOverlay} border ${t.border} w-fit`,
-  stat:         `${t.bgBase} px-6 py-3 flex flex-col gap-px`,
+  stats:        `grid grid-cols-2 sm:flex gap-px ${t.bgOverlay} border ${t.border} w-full sm:w-fit`,
+  stat:         `${t.bgBase} px-4 sm:px-6 py-3 flex flex-col gap-px`,
   statNum:      `font-mono text-[1.4rem] font-medium ${t.textSecondary}`,
   statLabel:    `text-[0.65rem] ${t.textFaint} uppercase tracking-widest`,
 

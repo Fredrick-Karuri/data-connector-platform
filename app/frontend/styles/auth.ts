@@ -2,7 +2,7 @@ import { tokens as t } from './tokens';
 
 export const s = {
   page:     `min-h-screen flex items-center justify-center ${t.bgBase} [background:radial-gradient(ellipse_60%_40%_at_20%_50%,#0d192933,transparent),radial-gradient(ellipse_60%_40%_at_80%_50%,#0a1f1233,transparent),var(--color-bg-base)]`,
-  card:     `w-96 p-10 border ${t.border} ${t.bgBase} flex flex-col gap-2`,
+  card: `w-full sm:w-96 p-6 sm:p-10 border ${t.border} ${t.bgBase} flex flex-col gap-2 mx-4 sm:mx-0`,
   logo:     `font-mono text-[0.7rem] tracking-[0.2em] ${t.textFaint} uppercase border ${t.border} px-2 py-1 w-fit mb-3`,
   title:    `text-2xl font-light ${t.textPrimary} tracking-tight`,
   sub:      `text-xs ${t.textGhost} mb-3`,
