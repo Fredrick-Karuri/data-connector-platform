@@ -82,6 +82,6 @@ docker-compose exec web npm test
 
 Detailed guides and design specs can be found in the `/Docs` directory:
 
-- [**System Setup**](./docs/setup.md) — Environment config, port mappings, and seeding.
-- [**System Design**](./docs/system-design.md) — Architecture, flattening strategies, and API contracts.
+- [**System Setup**](./Docs/setup.md) — Environment config, port mappings, and seeding.
+- [**System Design**](./Docs/system-design.md) — Architecture, flattening strategies, and API contracts.
  
