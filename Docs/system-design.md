@@ -68,6 +68,8 @@ The architecture is divided into three main zones: the **Client Layer** (Next.js
    3. Phase C: API generates a CSV/JSON file and saves it to a protected volume.
 5. **Access:** When a user requests a file, the RBAC Layer checks the `FileMetadata` table to verify the user's role allows the download.
 
+![alt text](images/architecture.png)
+
 ---
 
 ## Core Components

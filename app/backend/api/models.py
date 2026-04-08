@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """
     Custom user with Admin/User RBAC role (design p.12).
-    role is embedded in JWT payload via RoleTokenObtainPairSerializer (DCP-02).
+    role is embedded in JWT payload via RoleTokenObtainPairSerializer .
     """
     ROLE_ADMIN = "admin"
     ROLE_USER = "user"
@@ -152,7 +152,7 @@ class ProcessedRecord(models.Model):
     """
     Stores actual data rows pulled from source DBs (design p.14).
     JSONB data allows any schema from any source (design p.14 — Why JSONB for Records).
-    Written during the dual-storage submission flow (DCP-11).
+    Written during the dual-storage submission flow.
     """
     id         = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     job        = models.ForeignKey(ExtractionJob, on_delete=models.CASCADE, related_name="records")
@@ -203,7 +203,7 @@ class FileMetadata(models.Model):
 class FileAccessControl(models.Model):
     """
     Manages "Shared with Me" file access beyond the owner (design p.12).
-    The RBAC gatekeeper in DCP-12 checks this table for shared_with[] access.
+    The RBAC gatekeeper checks this table for shared_with[] access.
     """
     ACCESS_VIEWER     = "VIEWER"
     ACCESS_DOWNLOADER = "DOWNLOADER"

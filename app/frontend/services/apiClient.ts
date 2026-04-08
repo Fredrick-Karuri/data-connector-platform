@@ -1,4 +1,4 @@
-// DCP-03 | services/apiClient.ts
+// services/apiClient.ts
 // Base Axios instance — attaches Bearer token to every request,
 // handles 401 refresh flow, and maps backend errors to ApiError type (design p.21)
 

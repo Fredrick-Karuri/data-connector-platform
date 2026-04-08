@@ -1,4 +1,4 @@
-// DCP-13 | hooks/useConnections.ts
+// hooks/useConnections.ts
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { listConnections, createConnection, testConnection } from "@/services/connections";

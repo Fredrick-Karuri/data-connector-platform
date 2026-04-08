@@ -1,4 +1,4 @@
-// DCP-03 | services/submission.ts
+// services/submission.ts
 // POST /api/submit-batch/ — dual storage trigger (design p.10-11, p.20)
 // GET /api/files/ and GET /api/files/{id}/download/ — RBAC gated (design p.12)
 

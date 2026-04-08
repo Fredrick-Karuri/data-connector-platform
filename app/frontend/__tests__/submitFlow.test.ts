@@ -1,4 +1,4 @@
-// DCP-16 | __tests__/submitFlow.test.ts
+// __tests__/submitFlow.test.ts
 // Tests: submit sends correct payload, row error highlighting on 400,
 // file list renders, download triggered. Design ref: p.15, p.21, p.23.
 

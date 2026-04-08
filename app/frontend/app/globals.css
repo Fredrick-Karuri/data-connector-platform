@@ -4,8 +4,54 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Primitives */
+  --color-bg-base:      #0d0f12;
+  --color-bg-raised:    #13161b;
+  --color-bg-overlay:   #1a1d24;
+  --color-border:       #1e2128;
+
+  --color-text-primary: #f0f2f5;
+  --color-text-secondary:#e0e2e8;
+  --color-text-muted:   #9aa0ae;
+  --color-text-faint:   #555b6a;
+  --color-text-ghost:   #3a3f4c;
+
+  --color-accent:       #336791;
+  --color-accent-light: #4fa3d4;
+
+  --color-success:      #4ade80;
+  --color-danger:       #e05c5c;
+
+  --color-warning:         #ef9f27;
+  --color-warning-border:  #ba7517;
+  --color-surface-warning: #1f1808;
+
+  /* Semantic surfaces */
+  --color-surface-danger:  #2a1515;
+  --color-surface-accent:  #0d1929;
+  --color-surface-success: #0a1f12;
+}
+
+[data-theme="light"] {
+  --color-bg-base:       #f4f5f7;
+  --color-bg-raised:     #ffffff;
+  --color-bg-overlay:    #e8eaed;
+  --color-border:        #d8dae0;
+
+  --color-text-primary:  #0d0f12;
+  --color-text-secondary:#1e2128;
+  --color-text-muted:    #555b6a;
+  --color-text-faint:    #9aa0ae;
+  --color-text-ghost:    #bbbfc9;
+
+  --color-surface-danger:  #fdf0f0;
+  --color-surface-accent:  #eef4fb;
+  --color-surface-success: #f0fdf4;
+}
+
 body {
   font-family: 'IBM Plex Sans', sans-serif;
-  background: #0d0f12;
-  color: #e0e2e8;
+  background: var(--color-bg-base);
+  color: var(--color-text-secondary);
 }

@@ -1,4 +1,4 @@
-// DCP-16 | hooks/useFiles.ts
+// hooks/useFiles.ts
 // Wraps GET /api/files/ and GET /api/files/{id}/download/ (design p.12, p.20)
 "use client";
 import { useState, useEffect, useCallback } from "react";

@@ -127,7 +127,7 @@ describe("API row error highlighting", () => {
   });
 
   it("schema drift returns 400 — extra fields caught before submit", () => {
-    // The SubmitBatchSerializer cross-field check (DCP-06) catches this server-side.
+    // The SubmitBatchSerializer cross-field check  catches this server-side.
     // Frontend guard: getSubmitPayload only returns rows with original schema.
     const { result } = renderHook(() => useDiffTracker(ROWS));
     act(() => { result.current.updateCell("r1", "name", "Widget X"); });

@@ -1,3 +1,4 @@
+// app/extract/page.tsx
 "use client";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams }  from "next/navigation";
@@ -10,6 +11,7 @@ import { JobProgressBar }   from "@/components/JobProgressBar";
 import { AuthGuard }        from "@/components/AuthGuard";
 import { s }                from "@/styles/extract";
 import type { DbType }      from "@/types";
+
 
 const QUERY_PLACEHOLDERS: Record<string, string> = {
   postgres:   "SELECT * FROM inventory_items LIMIT 500",

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DCP-04 | scripts/setup_sources.sh
+# scripts/setup_sources.sh
 # Waits for all mock source containers to be healthy, then verifies seed data.
 # Called manually via: make seed
 # Design ref: p.23 — "setup_sources.sh runs during docker-compose up phase"
@@ -67,7 +67,7 @@ else
   docker exec -i dcp_mock_mysql \
     mysql -umock_user -pmock_pass mock_mysql_db < "$(dirname "$0")/seed_mysql.sql"
   
-  MY_COUNT=$(docker exec dcp_mock_mysql \ 
+  MY_COUNT=$(docker exec dcp_mock_mysql \
     mysql -umock_user -pmock_pass -D mock_mysql_db -sNe "SELECT COUNT(*) FROM customer_leads;" 2>/dev/null || echo "0")
 
   log "MySQL: seed complete. Total rows: $MY_COUNT"
@@ -91,8 +91,8 @@ else
     mock_mongo_db < "$(dirname "$0")/seed_mongo.js"
   
   MONGO_COUNT=$(docker exec dcp_mock_mongo \ 
-    mongosh --quiet -u mock_user -p mock_pass --authenticationDatabase admin \ 
-    mock_mongo_db --eval "db.user_logs.countDocuments()" 2>/dev/null || echo "0")
+    mongosh --quiet -u mock_user -p mock_pass --authenticationDatabase admin \
+      mock_mongo_db --eval "db.user_logs.countDocuments()" 2>/dev/null || echo "0")
 
   log "MongoDB: seed complete. Total docs: $MONGO_COUNT"
 fi
@@ -114,11 +114,37 @@ else
     --multiquery < "$(dirname "$0")/seed_clickhouse.sql"
   
   CH_COUNT=$(docker exec dcp_mock_clickhouse \ 
-    clickhouse-client --user mock_user --password mock_pass \ 
-    --query "SELECT COUNT(*) FROM mock_clickhouse_db.sensor_readings" 2>/dev/null || echo "0")
+    clickhouse-client --user mock_user --password mock_pass \
+      --query "SELECT COUNT(*) FROM mock_clickhouse_db.sensor_readings" 2>/dev/null || echo "0")
 
   log "ClickHouse: seed complete. Total rows: $CH_COUNT"
 fi
+
+# ── Django Users ───────────────────────────────────────────────────────────────
+setup_django_users() {
+  log "Creating Django users..."
+  docker exec dcp_api python manage.py shell -c "
+from api.models import User
+
+if not User.objects.filter(username='admin').exists():
+    User.objects.create_superuser('admin', password='admin1234')
+    print('admin created')
+else:
+    u = User.objects.get(username='admin')
+    u.set_password('admin1234')
+    u.save()
+    print('admin password reset')
+
+if not User.objects.filter(username='testuser').exists():
+    User.objects.create_user('testuser', password='user1234', role='user')
+    print('testuser created')
+else:
+    print('testuser already exists')
+"
+  log "Users ready — admin:admin1234 / testuser:user1234"
+}
+
+setup_django_users
 
 # ── Summary ────────────────────────────────────────────────────────────────────
 echo ""

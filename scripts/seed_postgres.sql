@@ -1,4 +1,4 @@
--- DCP-04 | scripts/seed_postgres.sql
+-- scripts/seed_postgres.sql
 -- Mock source: PostgreSQL — inventory_items
 -- Unique type test: UUIDs & Timestamps (design p.23)
 

@@ -1,4 +1,4 @@
-// DCP-03 | services/connections.ts
+// services/connections.ts
 // Wired to GET /api/connections/ and POST /api/connections/test/ (design p.20)
 
 import { apiClient } from "./apiClient";

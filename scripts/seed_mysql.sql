@@ -1,4 +1,4 @@
--- DCP-04 | scripts/seed_mysql.sql
+-- scripts/seed_mysql.sql
 -- Mock source: MySQL — customer_leads
 -- Unique type test: Varchar & Booleans (design p.23)
 

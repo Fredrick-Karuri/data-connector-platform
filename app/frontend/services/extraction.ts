@@ -1,4 +1,4 @@
-// DCP-03 | services/extraction.ts
+// services/extraction.ts
 // POST /api/extract/ → returns job_id immediately (design p.6, p.20)
 // GET /api/jobs/{job_id}/ → poll until SUCCESS or FAILED
 

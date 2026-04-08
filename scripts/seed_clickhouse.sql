@@ -1,4 +1,4 @@
--- DCP-04 | scripts/seed_clickhouse.sql
+-- scripts/seed_clickhouse.sql
 -- Mock source: ClickHouse — sensor_readings
 -- Unique type test: Int64 & Large Batches (design p.23)
 
@@ -23,7 +23,7 @@ ENGINE = MergeTree()
 ORDER BY (sensor_id, recorded_at);
 
 -- 50 rows covering varied sensors, locations, and anomaly flags
--- Exercises Int64/Float32 serialization in ClickHouseConnector (DCP-08)
+-- Exercises Int64/Float32 serialization in ClickHouseConnector 
 INSERT INTO sensor_readings
     (reading_id, sensor_id, location, temperature, humidity, pressure_hpa, battery_pct, is_anomaly, recorded_at)
 VALUES
