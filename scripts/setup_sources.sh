@@ -90,7 +90,7 @@ else
     mongosh -u mock_user -p mock_pass --authenticationDatabase admin \
     mock_mongo_db < "$(dirname "$0")/seed_mongo.js"
   
-  MONGO_COUNT=$(docker exec dcp_mock_mongo \ 
+  MONGO_COUNT=$(docker exec dcp_mock_mongo \
     mongosh --quiet -u mock_user -p mock_pass --authenticationDatabase admin \
       mock_mongo_db --eval "db.user_logs.countDocuments()" 2>/dev/null || echo "0")
 
@@ -113,7 +113,7 @@ else
     clickhouse-client --user mock_user --password mock_pass \
     --multiquery < "$(dirname "$0")/seed_clickhouse.sql"
   
-  CH_COUNT=$(docker exec dcp_mock_clickhouse \ 
+  CH_COUNT=$(docker exec dcp_mock_clickhouse \
     clickhouse-client --user mock_user --password mock_pass \
       --query "SELECT COUNT(*) FROM mock_clickhouse_db.sensor_readings" 2>/dev/null || echo "0")
 

@@ -2,24 +2,37 @@
 
 help:
 	@echo "Usage:"
-	help:
-	@echo "  make dev             # build, start, migrate, seed (full setup)"
-	@echo "  make up              # start full stack"
+	@echo ""
+	@echo "First-time setup:"
+	@echo "  make dev             # build images, start stack, migrate, seed (start here)"
+	@echo ""
+	@echo "Daily use:"
+	@echo "  make up              # start already-built stack"
 	@echo "  make down            # stop containers"
 	@echo "  make build           # build images"
 	@echo "  make restart         # rebuild + restart"
+	@echo ""
+	@echo "Database:"
 	@echo "  make makemigrations  # create new migrations"
 	@echo "  make migrate         # run Django migrations"
+	@echo "  make seed            # setup mock sources + load django fixtures"
+	@echo ""
+	@echo "Testing:"
+	@echo "  make test            # run all tests"
 	@echo "  make test-backend    # run backend pytest"
 	@echo "  make test-frontend   # run frontend npm tests"
-	@echo "  make test            # run all tests"
+	@echo ""
+	@echo "Logs:"
 	@echo "  make logs            # follow api and worker logs"
 	@echo "  make logs-api        # follow api logs only"
 	@echo "  make logs-worker     # follow worker logs only"
 	@echo "  make logs-frontend   # follow frontend logs only"
-	@echo "  make seed            # setup mock sources + load django fixtures"
+	@echo ""
+	@echo "Shells:"
 	@echo "  make shell-api       # open django shell"
 	@echo "  make shell-worker    # inspect celery worker"
+	@echo ""
+	@echo "Cleanup:"
 	@echo "  make clean           # remove containers, volumes, images, cache"
 
 dev: build up migrate seed
@@ -42,9 +55,6 @@ makemigrations:
 
 migrate:
 	docker compose exec api python manage.py migrate
-
-createsuperuser:
-	docker compose exec api python manage.py createsuperuser
 
 test-backend:
 	docker compose exec api pytest -q
