@@ -73,15 +73,16 @@ No other files need changing (Factory Pattern, design p.4-5).
 
 ```bash
 # Backend (98 tests)
-docker-compose exec api pytest
+make test-backend
 
 # Frontend (36 tests)
-docker-compose exec web npm test
+make test-frontend
 ```
+
 ## Documentation
 
 Detailed guides and design specs can be found in the `/Docs` directory:
 
 - [**System Setup**](./Docs/setup.md) — Environment config, port mappings, and seeding.
 - [**System Design**](./Docs/system-design.md) — Architecture, flattening strategies, and API contracts.
- 
+- [**Architecture Decision Records**](./Docs/adr.md) — Key design decisions, alternatives considered, and trade-offs.
