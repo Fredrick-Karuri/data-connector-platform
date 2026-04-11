@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { nav } from "@/styles/components";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import Link from "next/link";
 
 const AUTH_ROUTES = ["/login", "/register"];
 const LINKS = ["/connections", "/extract", "/files", "/docs"] as const;
@@ -32,13 +33,13 @@ export function NavBar() {
       {/* Desktop links */}
       <div className={nav.links}>
         {LINKS.map((path) => (
-          <a
+          <Link
             key={path}
             href={path}
             className={pathname === path ? nav.linkActive : nav.link}
           >
             {label(path)}
-          </a>
+          </Link>
         ))}
       </div>
 
@@ -73,7 +74,7 @@ export function NavBar() {
       {open && (
         <div className={nav.drawer}>
           {LINKS.map((path) => (
-            <a
+            <Link
               key={path}
               href={path}
               className={
@@ -82,8 +83,9 @@ export function NavBar() {
               onClick={() => setOpen(false)}
             >
               {label(path)}
-            </a>
+            </Link>
           ))}
+
           <div className={nav.drawerFooter}>
             <span className={isAdmin ? nav.badgeAdmin : nav.badge}>
               {isAdmin ? "admin" : "user"}
